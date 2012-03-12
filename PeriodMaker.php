@@ -66,6 +66,15 @@ class PeriodMaker
         return reset($newArray);
     }
 
+    public function isInRangeWithBegin($date, $begin, $end)
+    {
+        if ($date >= $begin and $date < $end) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getPoints($type)
     {
         $points = array();
@@ -78,11 +87,15 @@ class PeriodMaker
         return $points;
     }
 
+
+
     public function getPeriodRowInType($begin, $type)
     {
         $period = null;
         foreach ($this->_inData as $data) {
-            if (($data["type"] === $type) and ($data["begin"] === $begin)) {
+            if (($data["type"] === $type) and
+                ($this->isInRangeWithBegin($begin, $data["begin"], $data["end"]))
+            ) {
                 if (is_null($period)) {
                     $period = $data;
                 } else {
@@ -95,6 +108,11 @@ class PeriodMaker
         return $period;
     }
 
+    /**
+     * return nearest end for given begin
+     * @param string $begin
+     * @return string
+     */
     public function getPeriod($begin)
     {
         $end = $this->getLastEnd();
