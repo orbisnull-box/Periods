@@ -74,11 +74,15 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
 
     public function testGetCurrentEnd()
     {
-        $this->assertEquals("2011-01-09", $this->_maker->getCurrentEnd("2011-01-02"));
-        $this->assertEquals("2011-01-20", $this->_maker->getCurrentEnd("2011-01-09"));
-        $this->assertEquals("2011-02-05", $this->_maker->getCurrentEnd("2011-02-01"));
+        $this->assertEquals("2011-01-05", $this->_maker->getCurrentFullEnd("2010-12-12"));
+        $this->assertEquals("2011-01-09", $this->_maker->getCurrentFullEnd("2011-01-02"));
+        $this->assertEquals("2011-01-20", $this->_maker->getCurrentFullEnd("2011-01-09"));
+        $this->assertEquals("2011-02-05", $this->_maker->getCurrentFullEnd("2011-02-01"));
     }
 
-
+    public function testGetPeriods()
+    {
+        $this->assertEquals(getInToPeriods(), $this->_maker->getPeriods());
+    }
 
 }

@@ -113,17 +113,38 @@ class PeriodMaker
      * @param string $begin
      * @return string
      */
-    public function getCurrentEnd($begin)
+    public function getCurrentFullEnd($begin)
     {
         $end = $this->getLastEnd();
         foreach ($this->getTypes() as $type) {
             $periodRow = $this->getPeriodRowInType($begin, $type);
-            if ($end > $periodRow["end"]) {
+            if (!is_null($periodRow) and $end > $periodRow["end"]) {
                 $end = $periodRow["end"];
             }
         }
         return $end;
     }
 
-   
+
+    public function getPeriods()
+    {
+        $periods = array();
+        $begin = $this->getFirstBegin();
+        for($i=10; $i<100; $i++) {
+            $fullEnd = $this->getCurrentFullEnd($begin);
+            /**
+             * @todo определили максимальный отрезок $begin - $end, теперь необходимо проверить есть ли начало более высокого отрезка на этом если есть - сделать его начало - концом
+             *
+             */
+
+            /*$periods[] = array("begin" => $begin, "end"=>$end);
+            $begin = $end;
+            if ($end === $this->getLastEnd()) {
+                break;
+                //echo ("i:= $i \n");
+            }*/
+        }
+        return $periods;
+    }
+
 }
