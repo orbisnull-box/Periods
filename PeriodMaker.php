@@ -11,7 +11,6 @@ class PeriodMaker
         }
     }
 
-
     public function load($data)
     {
         $this->_inData = $data;
