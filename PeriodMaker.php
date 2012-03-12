@@ -66,7 +66,16 @@ class PeriodMaker
         return reset($newArray);
     }
 
-    public function isInRangeWithBegin($date, $begin, $end)
+    public static function isInRange($date, $begin, $end)
+    {
+        if ($date > $begin and $date < $end) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isInRangeWithBegin($date, $begin, $end)
     {
         if ($date >= $begin and $date < $end) {
             return true;
@@ -123,6 +132,40 @@ class PeriodMaker
             }
         }
         return $end;
+    }
+
+    public function getBeginInPeriodType($begin, $end, $type)
+    {
+        $point = null;
+        foreach ($this->_inData as $data) {
+            if (($data["type"] === $type) and
+                ($this->isInRange($data["begin"], $begin, $end))
+            ) {
+                if (is_null($point)) {
+                    $point = $data;
+                } else {
+                    if ($point["id"] > $data["id"]) {
+                        $point = $data;
+                    }
+                }
+            }
+        }
+        if (!is_null($point)) {
+            $point = $point["begin"];
+        }
+        return $point;
+    }
+
+    public function getBeginInPeriod($begin, $end)
+    {
+        $point = $end;
+        foreach ($this->getTypes() as $type) {
+            $newPoint = $this->getBeginInPeriodType($begin, $end, $type);
+            if (!is_null($newPoint) and $point > $newPoint) {
+                $point = $newPoint;
+            }
+        }
+        return $point;
     }
 
 
