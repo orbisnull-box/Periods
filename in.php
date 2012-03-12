@@ -29,3 +29,18 @@ function getInToPeriods()
     );
     return $periods;
 }
+
+function getInCalcPeriods()
+{
+    $periods = array(
+        array("begin"=>"2010-12-12", "end"=>"2010-12-20", "summa"=>50),
+        array("begin"=>"2010-12-20", "end"=>"2011-01-02", "summa"=>150),
+        array("begin"=>"2011-01-02", "end"=>"2011-01-09", "summa"=>130),
+        array("begin"=>"2011-01-09", "end"=>"2011-01-20", "summa"=>150),
+        array("begin"=>"2011-01-20", "end"=>"2011-02-01", "summa"=>200),
+        array("begin"=>"2011-02-01", "end"=>"2011-02-05", "summa"=>210),
+        array("begin"=>"2011-02-05", "end"=>"2011-02-10", "summa"=>260),
+        array("begin"=>"2011-02-10", "end"=>"2011-03-20", "summa"=>60),
+    );
+    return $periods;
+}

@@ -84,6 +84,16 @@ class PeriodMaker
         }
     }
 
+    public static function isRangeInRange($firstBegin, $firstEnd, $secondBegin, $secondEnd)
+    {
+        //echo "\n $firstBegin >= $secondBegin and $firstEnd <= $secondEnd \n";
+        if ($firstBegin >= $secondBegin and $firstEnd <= $secondEnd) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getPoints($type)
     {
         $points = array();
@@ -95,8 +105,6 @@ class PeriodMaker
         }
         return $points;
     }
-
-
 
     public function getPeriodRowInType($begin, $type)
     {
@@ -158,7 +166,6 @@ class PeriodMaker
         $result = true;
         foreach ($this->_inData as $data) {
             if ($data["type"] === $row["type"]) {
-                //echo $row["begin"].": ".$data["begin"]." ".$data["end"]."\n";
                 if ($this->isInRange($row["begin"], $data["begin"], $data["end"])
                     and ($row["id"] > $data["id"])
                 ) {
@@ -192,12 +199,12 @@ class PeriodMaker
         /**
          * @todo change to use while (now protect from unlimited repeat)
          */
-        for($i=0; $i<25; $i++) {
+        for ($i = 0; $i < 25; $i++) {
             $fullEnd = $this->getCurrentFullEnd($begin);
 
             $end = $this->getBeginInPeriod($begin, $fullEnd);
 
-            $periods[]= array("begin"=>$begin, "end"=>$end);
+            $periods[] = array("begin" => $begin, "end" => $end);
 
             $begin = $end;
             if ($end == $this->getLastEnd()) {
@@ -206,5 +213,37 @@ class PeriodMaker
         }
         return $periods;
     }
+
+    public function calcOnePeriodType($begin, $end, $type)
+    {
+        $row = null;
+        foreach ($this->_inData as $data) {
+            if ($data["type"] === $type) {
+                if ($this->isRangeInRange($begin, $end, $data["begin"], $data["end"])) {
+                    if ($row === null) {
+                        $row = $data;
+                    }
+                    if ($row["id"] > $data["id"]) {
+                        $row = $data;
+                    }
+                }
+            }
+        }
+        return $row["summa"];
+    }
+
+    public function calcPeriods($periods)
+    {
+        $sumPeriods = array();
+        foreach ($periods as $period) {
+            $sumPeriod = 0;
+            foreach ($this->getTypes() as $type) {
+                $sumPeriod = $sumPeriod + $this->calcOnePeriodType($period["begin"], $period["end"], $type);
+            }
+            $sumPeriods[] = array("begin" => $period["begin"], "end" => $period["end"], "summa" => $sumPeriod);
+        }
+        return $sumPeriods;
+    }
+
 
 }

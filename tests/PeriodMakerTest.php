@@ -3,31 +3,35 @@ require_once "PHPUnit/Autoload.php";
 require_once "../PeriodMaker.php";
 require_once "../in.php";
 
-class PeriodMakerTest extends PHPUnit_Framework_TestCase {
+class PeriodMakerTest extends PHPUnit_Framework_TestCase
+{
     /**
      * @var PeriodMaker
      */
     protected $_maker;
     protected $_inData;
     protected $_inPeriods;
+    protected $_calcPeriods;
 
-   public  function setUp()
-   {
-       $this->_maker = new PeriodMaker();
-       $this->_inData = getInArray();
-       $this->_inPeriods = getInToPeriods();
-       $this->_maker->load($this->_inData);
-   }
+    public function setUp()
+    {
+        $this->_maker = new PeriodMaker();
+        $this->_inData = getInArray();
+        $this->_inPeriods = getInToPeriods();
+        $this->_calcPeriods = getInCalcPeriods();
+        $this->_maker->load($this->_inData);
+    }
 
     public function tearDown()
     {
-        unset ($this->_maker);
-        unset ($this->_inData);
+        unset($this->_maker);
+        unset($this->_inData);
         unset($this->_inPeriods);
+        unset($this->_calcPeriods);
     }
 
-
-    public function testTrue() {
+    public function testTrue()
+    {
         $this->assertTrue(true);
     }
 
@@ -52,16 +56,16 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
     {
         $points = $this->_maker->getPoints(1);
         $this->assertCount(8, $points);
-        $this->assertEquals(array("id"=>1, "date"=>"2010-12-20"), $points[0]);
+        $this->assertEquals(array("id" => 1, "date" => "2010-12-20"), $points[0]);
 
         $points = $this->_maker->getPoints(2);
         $this->assertCount(8, $points);
-        $this->assertEquals(array("id"=>8, "date"=>"2010-12-12"), $points[0]);
+        $this->assertEquals(array("id" => 8, "date" => "2010-12-12"), $points[0]);
     }
 
     public function testGetTypes()
     {
-        $types = array(1,2);
+        $types = array(1, 2);
         $this->assertEquals($types, $this->_maker->getTypes());
     }
 
@@ -117,9 +121,23 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("2011-01-20", $this->_maker->getBeginInPeriod($begin, $end), "second");
     }
 
-
     public function testGetPeriods()
     {
         $this->assertEquals($this->_inPeriods, $this->_maker->getPeriods());
+    }
+
+    public function testCalcOnePeriodType()
+    {
+        $this->assertEquals(50, $this->_maker->calcOnePeriodType($this->_inPeriods[0]["begin"], $this->_inPeriods[0]["end"], 2));
+        $this->assertNull($this->_maker->calcOnePeriodType($this->_inPeriods[0]["begin"], $this->_inPeriods[0]["end"], 1));
+        $this->assertEquals(100, $this->_maker->calcOnePeriodType("2011-01-09", "2011-01-20", 1));
+        $this->assertEquals(50, $this->_maker->calcOnePeriodType("2011-01-09", "2011-01-20", 2));
+        $this->assertEquals(150, $this->_maker->calcOnePeriodType("2011-01-20", "2011-02-01", 1));
+        $this->assertEquals(50, $this->_maker->calcOnePeriodType("2011-01-20", "2011-02-01", 2));
+    }
+
+    public function testCalcPeriods()
+    {
+        $this->assertEquals($this->_calcPeriods, $this->_maker->calcPeriods($this->_maker->getPeriods()));
     }
 }
