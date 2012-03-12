@@ -14,3 +14,18 @@ function getInArray()
     );
     return $in;
 }
+
+function getInToPeriods()
+{
+    $periods = array(
+        array("begin"=>"2010-12-12", "end"=>"2010-12-20"),
+        array("begin"=>"2010-12-20", "end"=>"2011-01-02"),
+        array("begin"=>"2011-01-02", "end"=>"2011-01-09"),
+        array("begin"=>"2011-01-09", "end"=>"2011-01-20"),
+        array("begin"=>"2011-01-20", "end"=>"2011-02-01"),
+        array("begin"=>"2011-02-01", "end"=>"2011-02-05"),
+        array("begin"=>"2011-02-05", "end"=>"2011-02-10"),
+        array("begin"=>"2011-02-10", "end"=>"2011-03-20"),
+    );
+    return $periods;
+}
