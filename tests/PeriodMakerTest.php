@@ -140,4 +140,10 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->_calcPeriods, $this->_maker->calcPeriods($this->_maker->getPeriods()));
     }
+
+    public function testCalc()
+    {
+        $maker = new PeriodMaker($this->_inData);
+        $this->assertEquals($this->_calcPeriods, $maker->calc());
+    }
 }

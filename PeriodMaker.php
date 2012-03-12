@@ -4,6 +4,13 @@ class PeriodMaker
 {
     protected $_inData;
 
+    public function __construct($data = null)
+    {
+        if (!is_null($data)) {
+            $this->load($data);
+        }
+    }
+
 
     public function load($data)
     {
@@ -245,5 +252,15 @@ class PeriodMaker
         return $sumPeriods;
     }
 
+    public function calc($data = null)
+    {
+        if (!is_null($data)) {
+            $this->load($data);
+        } elseif (!isset($this->_inData)) {
+            throw new LogicException("Please first load data< second calculate data");
+        }
+
+        return $this->calcPeriods($this->getPeriods());
+    }
 
 }
