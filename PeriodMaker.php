@@ -113,7 +113,7 @@ class PeriodMaker
      * @param string $begin
      * @return string
      */
-    public function getPeriod($begin)
+    public function getCurrentEnd($begin)
     {
         $end = $this->getLastEnd();
         foreach ($this->getTypes() as $type) {
@@ -125,22 +125,5 @@ class PeriodMaker
         return $end;
     }
 
-    public function getCurrentEnd($begin, $type)
-    {
-        $points = $this->getPoints($type);
-        //найти рассматриваемый период
-        $end["date"] = $begin;
-        $end["id"] = 10;
-        foreach($points as $point) {
-            //echo ($point["date"]."<".$end["date"] .":". $point["id"]." < ".$end["id"]."\n");
-            if ($point["date"] < $end["date"] or $point["id"] < $end["id"]){
-                $end["date"] = $point["date"];
-                $end["id"] = $point["id"];
-                //var_dump($end);
-                //break;
-            }
-        }
-        return $end["date"];
-    }
-
+   
 }
