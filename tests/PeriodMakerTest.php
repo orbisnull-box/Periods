@@ -115,7 +115,7 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
     }
 
 
-  /*  public function testGetPeriods()
+    public function testGetPeriods()
     {
         $inPeriods = getInToPeriods();
         $periods = $this->_maker->getPeriods();
@@ -125,6 +125,6 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
             //$this->assertEquals($inPeriods[$i], $periods[$i]);
         }
 
-    }*/
+    }
 
 }

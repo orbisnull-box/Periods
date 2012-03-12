@@ -189,20 +189,18 @@ class PeriodMaker
     {
         $periods = array();
         $begin = $this->getFirstBegin();
+        /**
+         * @todo change to use while (now protect from unlimited repeat)
+         */
         for($i=0; $i<25; $i++) {
             $fullEnd = $this->getCurrentFullEnd($begin);
-            /**
-             * @todo определили максимальный отрезок $begin - $end, теперь необходимо проверить есть ли начало более высокого отрезка на этом если есть - сделать его начало - концом
-             *
-             */
+
             $end = $this->getBeginInPeriod($begin, $fullEnd);
 
-            var_dump(array("begin"=>$begin, "end"=>$end));
             $periods[]= array("begin"=>$begin, "end"=>$end);
 
             $begin = $end;
             if ($end == $this->getLastEnd()) {
-                echo ("i:= $i \n");
                 break;
             }
         }
