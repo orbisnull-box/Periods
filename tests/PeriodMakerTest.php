@@ -9,11 +9,13 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
      */
     protected $_maker;
     protected $_inData;
+    protected $_inPeriods;
 
    public  function setUp()
    {
        $this->_maker = new PeriodMaker();
        $this->_inData = getInArray();
+       $this->_inPeriods = getInToPeriods();
        $this->_maker->load($this->_inData);
    }
 
@@ -21,6 +23,7 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
     {
         unset ($this->_maker);
         unset ($this->_inData);
+        unset($this->_inPeriods);
     }
 
 
@@ -117,14 +120,6 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
 
     public function testGetPeriods()
     {
-        $inPeriods = getInToPeriods();
-        $periods = $this->_maker->getPeriods();
-        $this->assertCount(count(getInToPeriods()), $periods);
-        for ($i=0; $i<count($inPeriods); $i++)
-        {
-            //$this->assertEquals($inPeriods[$i], $periods[$i]);
-        }
-
+        $this->assertEquals($this->_inPeriods, $this->_maker->getPeriods());
     }
-
 }
