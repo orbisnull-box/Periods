@@ -150,42 +150,61 @@ class PeriodMaker
                 }
             }
         }
-        if (!is_null($point)) {
-            $point = $point["begin"];
-        }
         return $point;
+    }
+
+    public function isBeginTopRowType($row)
+    {
+        $result = true;
+        foreach ($this->_inData as $data) {
+            if ($data["type"] === $row["type"]) {
+                //echo $row["begin"].": ".$data["begin"]." ".$data["end"]."\n";
+                if ($this->isInRange($row["begin"], $data["begin"], $data["end"])
+                    and ($row["id"] > $data["id"])
+                ) {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+        return $result;
     }
 
     public function getBeginInPeriod($begin, $end)
     {
         $point = $end;
         foreach ($this->getTypes() as $type) {
-            $newPoint = $this->getBeginInPeriodType($begin, $end, $type);
-            if (!is_null($newPoint) and $point > $newPoint) {
-                $point = $newPoint;
+            $row = $this->getBeginInPeriodType($begin, $end, $type);
+            if (!is_null($row) and $this->isBeginTopRowType($row)) {
+                $newPoint = $row["begin"];
+                if ($point > $newPoint) {
+                    $point = $newPoint;
+                }
             }
         }
         return $point;
     }
 
-
     public function getPeriods()
     {
         $periods = array();
         $begin = $this->getFirstBegin();
-        for($i=10; $i<100; $i++) {
+        for($i=0; $i<25; $i++) {
             $fullEnd = $this->getCurrentFullEnd($begin);
             /**
              * @todo определили максимальный отрезок $begin - $end, теперь необходимо проверить есть ли начало более высокого отрезка на этом если есть - сделать его начало - концом
              *
              */
+            $end = $this->getBeginInPeriod($begin, $fullEnd);
 
-            /*$periods[] = array("begin" => $begin, "end"=>$end);
+            var_dump(array("begin"=>$begin, "end"=>$end));
+            $periods[]= array("begin"=>$begin, "end"=>$end);
+
             $begin = $end;
-            if ($end === $this->getLastEnd()) {
+            if ($end == $this->getLastEnd()) {
+                echo ("i:= $i \n");
                 break;
-                //echo ("i:= $i \n");
-            }*/
+            }
         }
         return $periods;
     }

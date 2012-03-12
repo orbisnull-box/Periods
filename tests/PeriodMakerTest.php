@@ -80,29 +80,51 @@ class PeriodMakerTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("2011-02-05", $this->_maker->getCurrentFullEnd("2011-02-01"));
     }
 
-    public function testGetbeginInPeriodType()
+    public function testGetBeginInPeriodType()
     {
         $begin = $this->_maker->getFirstBegin();
         $end = $this->_maker->getCurrentFullEnd($begin);
-        $this->assertEquals("2010-12-20", $this->_maker->getBeginInPeriodType($begin, $end, 1));
-        $this->assertEquals("2011-01-02", $this->_maker->getBeginInPeriodType($begin, $end, 2));
+        $this->assertEquals($this->_inData[4], $this->_maker->getBeginInPeriodType($begin, $end, 1));
+        $this->assertEquals($this->_inData[1], $this->_maker->getBeginInPeriodType($begin, $end, 2));
     }
 
-    public function testGetbeginInPeriod()
+    public function testIsBeginTopRowType()
+    {
+        $this->assertFalse($this->_maker->isBeginTopRowType($this->_inData[5]), "fist");
+        $this->assertTrue($this->_maker->isBeginTopRowType($this->_inData[3]), "second");
+        $this->assertFalse($this->_maker->isBeginTopRowType($this->_inData[7]), "sri");
+    }
+
+    public function testGetBeginInPeriod()
     {
         $begin = $this->_maker->getFirstBegin();
         $end = $this->_maker->getCurrentFullEnd($begin);
-        $this->assertEquals("2010-12-20", $this->_maker->getBeginInPeriod($begin, $end));
+        $this->assertEquals("2010-12-20", $this->_maker->getBeginInPeriod($begin, $end), "fist");
 
         $begin = "2010-12-20";
         $end = $this->_maker->getCurrentFullEnd($begin);
         $this->assertEquals("2011-01-02", $this->_maker->getBeginInPeriod($begin, $end), "second");
+
+        $begin = "2011-01-02";
+        $end = $this->_maker->getCurrentFullEnd($begin);
+        $this->assertEquals("2011-01-09", $this->_maker->getBeginInPeriod($begin, $end), "second");
+
+        $begin = "2011-01-09";
+        $end = $this->_maker->getCurrentFullEnd($begin);
+        $this->assertEquals("2011-01-20", $this->_maker->getBeginInPeriod($begin, $end), "second");
     }
 
 
-    public function testGetPeriods()
+  /*  public function testGetPeriods()
     {
-        //$this->assertEquals(getInToPeriods(), $this->_maker->getPeriods());
-    }
+        $inPeriods = getInToPeriods();
+        $periods = $this->_maker->getPeriods();
+        $this->assertCount(count(getInToPeriods()), $periods);
+        for ($i=0; $i<count($inPeriods); $i++)
+        {
+            //$this->assertEquals($inPeriods[$i], $periods[$i]);
+        }
+
+    }*/
 
 }
